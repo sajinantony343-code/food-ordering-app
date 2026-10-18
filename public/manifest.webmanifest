@@ -1,0 +1,13 @@
+{
+  "name": "Foodie Food Ordering",
+  "short_name": "Foodie",
+  "description": "Order fresh meals from Foodie.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffaf5",
+  "theme_color": "#d84b2f",
+  "icons": [
+    { "src": "./pwa-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
