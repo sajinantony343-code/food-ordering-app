@@ -14,14 +14,7 @@ const categories = [
 export default function CategorySection({ selected, onSelect }) {
   return (
     <section className="section" aria-label="Food categories">
-      <div className="section-heading">
-        <div>
-          <p className="eyebrow dark">EXPLORE</p>
-          <h2>What are you craving?</h2>
-        </div>
-      </div>
-
-      <div className="category-grid">
+      <div className="category-grid" aria-label="Filter by category">
         {categories.map((category) => (
           <CategoryCard
             key={category.name}

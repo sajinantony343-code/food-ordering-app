@@ -20,6 +20,7 @@ export default function LoginPage() {
     try {
       const { data } = await api.post("/auth/login", { email, password });
       dispatch(loginSucceeded(data));
+      console.info("Authentication successful! Token stored in localStorage:", data.token);
       navigate(location.state?.from?.pathname || "/", { replace: true });
     } catch (loginError) {
       dispatch(loginFailed(loginError.response?.data?.message || "Could not log in. Check that the backend is running."));

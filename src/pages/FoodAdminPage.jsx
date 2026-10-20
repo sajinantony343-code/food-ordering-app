@@ -16,9 +16,16 @@ export default function FoodAdminPage() {
   const [notice, setNotice] = useState("");
 
   const refreshFoods = async () => {
+    console.info("GET Request: Fetching updated food list...");
     dispatch(foodsLoading());
-    try { const { data } = await api.get("/foods"); dispatch(foodsLoaded(data)); }
-    catch (loadError) { dispatch(foodsFailed(loadError.response?.data?.message)); }
+    try {
+      const { data } = await api.get("/foods");
+      console.info("GET Request: Food list received.", data);
+      dispatch(foodsLoaded(data));
+    } catch (loadError) {
+      console.error("GET Request failed:", loadError);
+      dispatch(foodsFailed(loadError.response?.data?.message));
+    }
   };
 
   useEffect(() => { if (status === "idle") refreshFoods(); }, [status]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -34,18 +41,32 @@ export default function FoodAdminPage() {
   const save = async (event) => {
     event.preventDefault(); setBusy(true); setError(""); setNotice("");
     try {
-      if (editingId) await api.put(`/foods/${editingId}`, form);
-      else await api.post("/foods", form);
+      if (editingId) {
+        console.info("PUT Request: Updating food:", form);
+        await api.put(`/foods/${editingId}`, form);
+      } else {
+        console.info("POST Request: Adding new food:", form);
+        await api.post("/foods", form);
+      }
       await refreshFoods(); setForm(emptyForm); setEditingId(null);
       setNotice(editingId ? "Food item updated." : "Food item added.");
-    } catch (saveError) { setError(saveError.response?.data?.message || "Could not save this food item."); }
+    } catch (saveError) {
+      console.error("Food save request failed:", saveError);
+      setError(saveError.response?.data?.message || "Could not save this food item.");
+    }
     finally { setBusy(false); }
   };
 
   const remove = async (id) => {
     setBusy(true); setError(""); setNotice("");
-    try { await api.delete(`/foods/${id}`); await refreshFoods(); setNotice("Food item deleted."); }
-    catch (deleteError) { setError(deleteError.response?.data?.message || "Could not delete this food item."); }
+    try {
+      console.info("DELETE Request: Removing food item:", id);
+      await api.delete(`/foods/${id}`);
+      await refreshFoods(); setNotice("Food item deleted.");
+    } catch (deleteError) {
+      console.error("Food delete request failed:", deleteError);
+      setError(deleteError.response?.data?.message || "Could not delete this food item.");
+    }
     finally { setBusy(false); }
   };
 

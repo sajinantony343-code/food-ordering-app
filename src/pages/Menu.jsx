@@ -10,18 +10,20 @@ export default function Menu() {
     search,
     setSearch,
     category,
-    setCategory
+    setCategory,
+    maxPrice,
+    setMaxPrice,
+    minRating,
+    setMinRating,
   } = useFoodMenu();
 
   return (
-    <div className="page">
-      <section className="page-hero">
-        <p className="eyebrow">OUR MENU</p>
-        <h1>Find your next favourite meal.</h1>
-        <p>Fresh food, bold flavours and something for every craving.</p>
-      </section>
-
-      <section className="section menu-section">
+    <div className="page menu-page">
+      <section className="section menu-section menu-shell">
+        <header className="menu-title">
+          <div><p className="eyebrow dark">FRESHLY MADE</p><h1>Find something delicious</h1></div>
+          <p>Good food, made fresh and delivered with care.</p>
+        </header>
         <SearchBar value={search} onChange={setSearch} />
 
         <CategorySection
@@ -29,8 +31,19 @@ export default function Menu() {
           onSelect={setCategory}
         />
 
+        <div className="menu-filters" aria-label="Menu filters">
+          <label>
+            <span>Max price: ₹{maxPrice}</span>
+            <input aria-label="Maximum price" type="range" min="100" max="500" step="10" value={maxPrice} onChange={(event) => setMaxPrice(Number(event.target.value))} />
+          </label>
+          <label>
+            <span>Min rating: {Number(minRating).toFixed(1)} ★</span>
+            <input aria-label="Minimum rating" type="range" min="0" max="5" step="0.1" value={minRating} onChange={(event) => setMinRating(Number(event.target.value))} />
+          </label>
+        </div>
+
         <div className="menu-result-heading">
-          <h2>{category === "All" ? "All dishes" : category}</h2>
+          <h2>{category === "All" ? "Our menu" : category}</h2>
           <span>{foods.length} items</span>
         </div>
 

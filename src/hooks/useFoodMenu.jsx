@@ -6,6 +6,8 @@ import { foodsFailed, foodsLoaded, foodsLoading, selectFoods, selectFoodsStatus 
 export default function useFoodMenu() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const [maxPrice, setMaxPrice] = useState(500);
+  const [minRating, setMinRating] = useState(0);
   const dispatch = useDispatch();
   const foodData = useSelector(selectFoods);
   const status = useSelector(selectFoodsStatus);
@@ -27,10 +29,12 @@ export default function useFoodMenu() {
 
       const text = `${food.name} ${food.category} ${food.description}`.toLowerCase();
       const matchesSearch = text.includes(search.toLowerCase());
+      const matchesPrice = Number(food.price) <= maxPrice;
+      const matchesRating = Number(food.rating) >= minRating;
 
-      return matchesCategory && matchesSearch;
+      return matchesCategory && matchesSearch && matchesPrice && matchesRating;
     });
-  }, [foodData, search, category]);
+  }, [foodData, search, category, maxPrice, minRating]);
 
   return {
     foods: filteredFoods,
@@ -40,5 +44,9 @@ export default function useFoodMenu() {
     setSearch,
     category,
     setCategory,
+    maxPrice,
+    setMaxPrice,
+    minRating,
+    setMinRating,
   };
 }
